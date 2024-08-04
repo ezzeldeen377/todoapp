@@ -10,7 +10,6 @@ import 'package:to_do_app/firestore_utils.dart';
 import 'package:to_do_app/homepage/edit_page.dart';
 import 'package:to_do_app/homepage/view_page.dart';
 import 'package:to_do_app/moduls/task.dart';
-import 'package:to_do_app/my_theme.dart';
 import 'package:to_do_app/provider/Appprovider.dart';
 import 'package:to_do_app/provider/list_provider.dart';
 class Tasks extends StatefulWidget {
@@ -151,8 +150,8 @@ class _TasksState extends State<Tasks> {
                         ),
                         color: AppColors.whiteColor,
                         onPressed: (){
-                          finishTask(widget.task);
-                          listProvider.initDataList();
+                          listProvider.finishTask(widget.task);
+                          print(widget.task.isDone);
                           setState(() {
 
                           });
@@ -173,10 +172,5 @@ class _TasksState extends State<Tasks> {
        FirestoreUtils.getCollections().doc(id).delete();
   }
 
-  Future<void> finishTask(Task task) async {
-    task.isDone=true;
-     await FirestoreUtils.getCollections().doc(task.id).update(task.toFirestore());
 
-
-  }
 }

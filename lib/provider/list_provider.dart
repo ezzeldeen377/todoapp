@@ -61,6 +61,11 @@ class ListProvider extends ChangeNotifier{
     notifyListeners();
 
   }
+  void finishTask(Task task) async{
+    task.isDone=true;
+    await FirestoreUtils.getCollections().doc(task.id).update(task.toFirestore());
+    notifyListeners();
+  }
 
   bool isDone(Task task){
     return task.isDone;
