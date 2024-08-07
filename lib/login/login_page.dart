@@ -2,9 +2,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_app/app_colors.dart';
+import 'package:to_do_app/firestore_utils.dart';
 import 'package:to_do_app/homepage/home_page.dart';
+import 'package:to_do_app/moduls/user.dart';
 import 'package:to_do_app/provider/Appprovider.dart';
+import 'package:to_do_app/provider/list_provider.dart';
 import 'package:to_do_app/register/register_page.dart';
 import 'package:to_do_app/widgets/alert.dart';
 import 'package:to_do_app/widgets/my_text_form_field.dart';
@@ -171,7 +175,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() async {
-    print('here');
 
     if(formKey.currentState?.validate()==true) {
       try {
@@ -179,9 +182,26 @@ class _LoginPageState extends State<LoginPage> {
         Alert.showLoading(context: context, message: 'Loading...');
         var credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
-        ///hide loading
-         Alert.hideLoading(context: context);
-        Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+        var user= await FirestoreUtils.getUserFromFirestore(credential.user!.uid);
+        if(user==null){
+          return;
+        }
+        var listProvider=Provider.of<ListProvider>(context,listen: false);
+        listProvider.changeUser(user);
+        Alert.hideLoading(context: context);
+        Alert.showAlert(context: context, content: ' Login Successfully ',title: 'Congratulation',
+            firstAction: (){
+              Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+            },firstbutton: 'ok',
+        // secondbutton:'Save',
+        //    SecondAction: () async {
+        //      SharedPreferences pref = await SharedPreferences.getInstance();
+        //      pref.setBool('saveLogInfo', true);
+        //      Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+        //
+        //    }
+        );
+
 
 
       } on FirebaseAuthException catch (e) {

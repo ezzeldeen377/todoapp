@@ -217,8 +217,9 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
     if (formkey.currentState?.validate() == true) {
           var task =Task(
               name: name.text, description: description.text, dateTime: selectedDate,hour: selectedTime.hour,min: selectedTime.minute );
+          var provider = Provider.of<AppProvider>(context,listen: false);
 
-          FirestoreUtils.addToFirestore(task);
+          FirestoreUtils.addTaskToFirestore(task,listProvider.currentUser!.id!);
           Navigator.pop(context);
 
     }

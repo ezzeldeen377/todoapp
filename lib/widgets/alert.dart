@@ -32,12 +32,12 @@ class Alert {
     if(firstbutton!=null){
       actionList.add(TextButton(onPressed: (){
         firstAction!=null ?firstAction.call():Navigator.of(context).pop();
-      },child: Text(firstbutton),));
+      },child: Text(firstbutton,style: TextStyle(fontSize: 12,color: AppColors.blueColor),),));
     }
     if(secondbutton!=null){
       actionList.add(TextButton(onPressed: (){
         SecondAction!=null? SecondAction.call():Navigator.of(context).pop();
-      },child: Text(secondbutton),));
+      },child: Text(secondbutton,style: TextStyle(fontSize: 12,color: AppColors.blueColor),),));
     }
     showDialog(
         context: context,

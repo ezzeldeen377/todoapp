@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/app_colors.dart';
+import 'package:to_do_app/firestore_utils.dart';
 import 'package:to_do_app/homepage/home_page.dart';
+import 'package:to_do_app/moduls/user.dart';
 import 'package:to_do_app/provider/Appprovider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:to_do_app/provider/list_provider.dart';
 import 'package:to_do_app/widgets/alert.dart';
 import 'package:to_do_app/widgets/my_text_form_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,13 +19,13 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController usernameController =TextEditingController(text: 'ezzeldeen');
+  TextEditingController usernameController =TextEditingController( );
 
-  TextEditingController emailController =TextEditingController(text: 'ezzeldeen69@gmail.com');
+  TextEditingController emailController =TextEditingController();
 
-  TextEditingController passwordController =TextEditingController(text: '123456');
+  TextEditingController passwordController =TextEditingController();
 
-  TextEditingController confirmPasswordController =TextEditingController(text: '123456');
+  TextEditingController confirmPasswordController =TextEditingController();
 
   var formKey= GlobalKey<FormState>();
 
@@ -175,9 +178,13 @@ class _RegisterPageState extends State<RegisterPage> {
         Alert.showLoading(context: context, message: 'waiting');
         var userCredentail= await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
-         print(userCredentail.user?.uid);
+
+         MyUser user=MyUser(id: userCredentail.user?.uid, name: usernameController.text, email: emailController.text);
+         FirestoreUtils.addUserToFirestore(user);
+        var listProvider=Provider.of<ListProvider>(context,listen: false);
+        listProvider.changeUser(user);
          Alert.hideLoading(context: context);
-         Alert.showAlert(context: context, content: 'Account Create Successfully ',title: 'Success',
+         Alert.showAlert(context: context, content: 'Account Create Successfully ',title: 'congratulation',
              firstbutton: 'ok',firstAction: (){
            Navigator.of(context).pushReplacementNamed(HomePage.routeName);
              });

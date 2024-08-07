@@ -46,7 +46,7 @@ class _SettingsTabState extends State<SettingsTab> {
             Center(
               child: DropdownMenu(
                   width: width*0.77,
-                  initialSelection: languages[languagecode.indexOf(provider.appLanguage)],
+                  initialSelection: languages[languagecode.indexOf(provider.appLanguage!)],
                   onSelected: (value){
                     if(value!=null) {
                       provider.changeLanguage(

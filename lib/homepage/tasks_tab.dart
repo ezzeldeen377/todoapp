@@ -20,6 +20,12 @@ class _TasksTabState extends State<TasksTab> {
   Widget build(BuildContext context) {
     var provider =Provider.of<AppProvider>(context);
      listProvider =Provider.of<ListProvider>(context);
+      if(listProvider.list.isEmpty){
+        listProvider.initDataList();
+        setState(() {
+
+        });
+      }
     double height = MediaQuery.of(context).size.height;
 
     return Stack(children: [
@@ -39,7 +45,7 @@ class _TasksTabState extends State<TasksTab> {
         children: [
           EasyDateTimeLine(
 
-            locale: provider.appLanguage,
+            locale: provider.appLanguage!,
             initialDate: listProvider.selectedDate,
             onDateChange: (selectedDate) {
 

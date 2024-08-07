@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_app/homepage/edit_page.dart';
 import 'package:to_do_app/homepage/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,13 +20,13 @@ void main() async{
    await Firebase.initializeApp(
      options: DefaultFirebaseOptions.currentPlatform,
    );
+
   runApp(
   MultiProvider(providers: [
     ChangeNotifierProvider(create: (context)=>AppProvider()),
     ChangeNotifierProvider(create: (context)=>ListProvider()),
   ],
             child: MyApp()));
-  await FirebaseFirestore.instance.disableNetwork();
 
 }
 
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget{
     var provider=Provider.of<AppProvider>(context);
    return MaterialApp(
      debugShowCheckedModeBanner: false,
-     initialRoute: LoginPage.routeName,
+     initialRoute:LoginPage.routeName,
+
      routes:{
        HomePage.routeName:(context)=>HomePage(),
        EditPage.routeName:(context)=>EditPage(),
@@ -54,4 +56,5 @@ class MyApp extends StatelessWidget{
 
    );
   }
+
 }

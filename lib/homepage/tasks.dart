@@ -169,7 +169,8 @@ class _TasksState extends State<Tasks> {
   }
 
   void delete(String id){
-       FirestoreUtils.getCollections().doc(id).delete();
+    var listProvider=Provider.of<ListProvider>(context,listen: false);
+       FirestoreUtils.getTaskCollections(listProvider.currentUser!.id!).doc(id).delete();
   }
 
 

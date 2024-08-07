@@ -273,7 +273,7 @@ class _EditPageState extends State<EditPage> {
       args.dateTime=selectedDate!;
       args.hour=selectedTime!.hour;
       args.min=selectedTime!.minute;
-      FirestoreUtils.updateDate(args).timeout(Duration(seconds: 1),onTimeout: (){
+      FirestoreUtils.updateDate(args,listProvider.currentUser!.id!).timeout(Duration(seconds: 1),onTimeout: (){
         print('updated');
       });
       Navigator.pop(context);
